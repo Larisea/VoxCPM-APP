@@ -440,7 +440,7 @@ function handleFiles(files) {
 
         const progressHTML = `
             <div class="upload-progress" id="upload-${file.name}">
-                <span style="color:var(--text-secondary); font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:1px;">${t('toast.uploading')}: ${file.name}</span>
+                <span style="color:var(--text-secondary); font-size:12px;">${t('toast.uploading')}: ${file.name}</span>
                 <div class="progress-track" style="margin-top:4px;">
                     <div class="progress-fill upload-fill" style="width:0%"></div>
                 </div>
@@ -694,7 +694,7 @@ async function pollTask(taskId) {
                 document.getElementById('ttsResult').innerHTML = `
                     <div class="result-card">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="color:var(--green); font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:1px;">${t('toast.synthComplete')}</span>
+                            <span style="color:var(--green); font-weight:600; font-size:13px;">${t('toast.synthComplete')}</span>
                             <div style="display:flex; align-items:center; gap:12px;">
                                 <span class="range-label">${result.duration}s / ${result.sample_rate}Hz</span>
                                 <a class="btn btn-outline btn-sm" href="/api/download/${result.filename}" download="${result.filename}">${t('toast.download')}</a>
@@ -876,7 +876,7 @@ async function doCover() {
         document.getElementById('coverResult').innerHTML = `
             <div class="result-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="color:var(--green); font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:1px;">${t('toast.coverComplete')} (${lines.length})</span>
+                    <span style="color:var(--green); font-weight:600; font-size:13px;">${t('toast.coverComplete')} (${lines.length})</span>
                     <button class="btn btn-outline btn-sm" onclick="downloadCover('${url}')">${t('toast.download')}</button>
                 </div>
                 <audio controls src="${url}" style="width:100%; margin-top:8px;"></audio>

@@ -1,38 +1,33 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VoxCPM // Voice Synthesis Terminal</title>
+<title>VoxCPM</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="app">
 
-  <!-- ═══ Header ═══ -->
+  <!-- Header -->
   <div class="header">
     <div class="header-top">
-      <h1>VoxCPM</h1>
-      <div style="display:flex; align-items:center; gap:16px;">
-        <span class="header-model">v1.5 // Neural Voice Synthesis</span>
+      <a class="header-brand" href="/">Vox<span>CPM</span></a>
+      <div class="header-right">
+        <div class="header-status">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">—</span>
+        </div>
         <div class="lang-toggle">
           <button class="lang-btn active" id="langEn" onclick="setLang('en')">EN</button>
           <button class="lang-btn" id="langZh" onclick="setLang('zh')">中</button>
         </div>
       </div>
     </div>
-    <div class="header-line"></div>
-    <div class="header-status">
-      <div class="status-indicator">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">CONNECTING...</span>
-      </div>
-      <span style="color:var(--text-muted)">│</span>
-      <span>MODEL: VOX-1.5</span>
-    </div>
+    <div class="header-divider"></div>
   </div>
 
-  <!-- ═══ Navigation ═══ -->
+  <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('tts')" data-i18n="tab.tts">Synthesis</button>
     <button class="tab" onclick="switchTab('reference')" data-i18n="tab.voicebank">Voice Bank</button>
@@ -40,10 +35,13 @@
     <button class="tab" onclick="switchTab('cover')" data-i18n="tab.revoice">Revoice</button>
   </div>
 
-  <!-- ═══ Tab: TTS ═══ -->
+  <!-- ═══ TTS ═══ -->
   <div id="tab-tts" class="tab-content">
     <div class="card">
-      <div class="card-title" data-i18n="tts.title">Text-to-Speech Engine</div>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+        <span data-i18n="tts.title">Text-to-Speech</span>
+      </div>
 
       <div class="form-group">
         <label data-i18n="tts.voiceProfile">Voice Profile</label>
@@ -51,141 +49,154 @@
           <option value="" data-i18n="tts.defaultVoice">— Default Voice —</option>
         </select>
       </div>
-
       <div class="form-group" id="promptTextGroup" style="display:none;">
         <label data-i18n="tts.refTranscript">Reference Transcript</label>
         <input type="text" id="promptText" data-i18n-placeholder="tts.refTranscriptPH" placeholder="Enter the text spoken in the reference audio...">
       </div>
-
       <div class="form-group">
         <label data-i18n="tts.inputText">Input Text</label>
         <textarea id="ttsText" data-i18n-placeholder="tts.inputTextPH" placeholder="Enter text to synthesize..." maxlength="500"></textarea>
         <div id="charCount" class="char-count">0 / 500</div>
       </div>
-
-      <div style="display:flex; gap:20px; flex-wrap:wrap;">
-        <div class="form-group" style="flex:1; min-width:160px;">
+      <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <div class="form-group" style="flex:1; min-width:140px;">
           <label data-i18n="tts.cfgScale">CFG Scale</label>
           <input type="range" id="cfg" min="1.0" max="4.0" step="0.1" value="2.0" oninput="document.getElementById('cfgVal').textContent=this.value">
-          <div class="range-label">Value: <span id="cfgVal" class="range-value">2.0</span></div>
+          <div class="range-label"><span id="cfgVal" class="range-value">2.0</span></div>
         </div>
-        <div class="form-group" style="flex:1; min-width:160px;">
+        <div class="form-group" style="flex:1; min-width:140px;">
           <label data-i18n="tts.inferSteps">Inference Steps</label>
           <input type="range" id="steps" min="4" max="20" step="1" value="10" oninput="document.getElementById('stepsVal').textContent=this.value">
-          <div class="range-label">Steps: <span id="stepsVal" class="range-value">10</span></div>
+          <div class="range-label"><span id="stepsVal" class="range-value">10</span></div>
         </div>
       </div>
-
       <div class="btn-row">
-        <button class="btn btn-primary" id="btnGenerate" onclick="doTTS()"><span data-i18n="tts.generate">▸ Generate</span></button>
-        <button class="btn btn-outline" onclick="document.getElementById('ttsText').value=''; updateCharCount();"><span data-i18n="tts.clear">Clear</span></button>
+        <button class="btn btn-primary" id="btnGenerate" onclick="doTTS()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span data-i18n="tts.generate">Generate</span>
+        </button>
+        <button class="btn btn-outline" onclick="document.getElementById('ttsText').value=''; updateCharCount();">Clear</button>
       </div>
-
       <div id="ttsProgress" style="display:none; margin-top:16px;">
-        <div style="display:flex; justify-content:space-between;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
           <span class="range-label" id="ttsMsg">Processing...</span>
           <span class="range-value" id="ttsPercent">0%</span>
         </div>
         <div class="progress-track"><div class="progress-fill" id="ttsFill" style="width:0%"></div></div>
       </div>
-
       <div id="ttsResult"></div>
     </div>
 
     <div class="card">
-      <div class="card-title" data-i18n="tts.recentOutput">Recent Output</div>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+        <span data-i18n="tts.recentOutput">Recent Output</span>
+      </div>
       <div class="audio-list" id="historyList">
-        <div class="empty"><div class="icon">◇</div><p>No output yet</p></div>
+        <div class="empty"><p data-i18n="tts.empty">No output yet</p></div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Tab: Voice Bank ═══ -->
+  <!-- ═══ Voice Bank ═══ -->
   <div id="tab-reference" class="tab-content" style="display:none;">
     <div class="card">
-      <div class="card-title" data-i18n="vb.uploadRef">Upload Reference</div>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+        <span data-i18n="vb.uploadRef">Upload Reference</span>
+      </div>
       <div class="file-upload" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <div class="upload-icon">⬆</div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
         <p data-i18n="vb.dropText">Drop audio files or click to upload</p>
-        <p style="font-size:10px; margin-top:4px; color:var(--text-muted);" data-i18n="vb.dropHint">WAV / MP3 / FLAC — 15-30s recommended</p>
+        <p style="font-size:11px; margin-top:2px;" data-i18n="vb.dropHint">WAV / MP3 / FLAC — 15-30s recommended</p>
         <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.ogg" onchange="uploadFile(event)" multiple>
       </div>
       <div id="uploadStatus" style="margin-top:8px;"></div>
     </div>
     <div class="card">
-      <div class="card-title" data-i18n="vb.library">Voice Library</div>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        <span data-i18n="vb.library">Voice Library</span>
+      </div>
       <div class="audio-list" id="refList">
-        <div class="empty"><div class="icon">◇</div><p>Empty library</p></div>
+        <div class="empty"><p data-i18n="vb.empty">Empty library</p></div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Tab: Record ═══ -->
+  <!-- ═══ Record ═══ -->
   <div id="tab-record" class="tab-content" style="display:none;">
     <div class="card">
-      <div class="card-title" data-i18n="rec.title">Audio Capture</div>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+        <span data-i18n="rec.title">Audio Capture</span>
+      </div>
       <div class="form-group">
         <label data-i18n="rec.script">Script (read aloud while recording)</label>
-        <textarea id="recordText" placeholder="Text to read during recording...">今天天气真好，阳光明媚，微风轻拂，是个适合出门散步的好日子。</textarea>
+        <textarea id="recordText">今天天气真好，阳光明媚，微风轻拂，是个适合出门散步的好日子。</textarea>
       </div>
       <div class="recorder">
-        <button class="rec-btn" id="recBtn" onclick="toggleRecord()">
-          <div class="inner"></div>
-        </button>
+        <button class="rec-btn" id="recBtn" onclick="toggleRecord()"><div class="inner"></div></button>
         <div class="rec-timer" id="recTimer">00:00</div>
-        <p class="range-label" id="recHint" style="margin-top:10px;" data-i18n="rec.hint">Press to record — aim for 10-30 seconds</p>
+        <p class="range-label" id="recHint" style="margin-top:8px;" data-i18n="rec.hint">Press to record — 10-30 seconds</p>
       </div>
-      <audio id="recPreview" controls style="width:100%; margin-top:16px; display:none;"></audio>
+      <audio id="recPreview" controls style="width:100%; margin-top:12px; display:none;"></audio>
       <div class="btn-row" style="justify-content:center;">
-        <button class="btn btn-success" id="btnSaveRec" onclick="saveRecording()" style="display:none;"><span data-i18n="rec.save">▸ Save to Voice Bank</span></button>
+        <button class="btn btn-success" id="btnSaveRec" onclick="saveRecording()" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span data-i18n="rec.save">Save to Voice Bank</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Tab: Cover ═══ -->
+  <!-- ═══ Cover ═══ -->
   <div id="tab-cover" class="tab-content" style="display:none;">
     <div class="card">
-      <div class="card-title" data-i18n="cover.title">Revoice Studio</div>
-      <p style="color:var(--text-secondary); font-size:12px; margin-bottom:16px; letter-spacing:0.5px;" data-i18n="cover.desc">
-        Train a voice model via RVC, then replace vocals in any song with your own voice.
-      </p>
-      <div class="step-grid">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span data-i18n="cover.title">Revoice Studio</span>
+      </div>
+      <div class="step-grid" style="margin-bottom:20px;">
         <div class="step-card" data-color="cyan">
           <div class="step-num" data-i18n="cover.phase1num">Phase 01 — Acquire</div>
-          <div class="step-desc" data-i18n="cover.phase1desc">Record 3-10 minutes of clean dry vocals. Multiple short clips work well.</div>
-          <button class="btn btn-outline btn-sm" onclick="switchTab('record')"><span data-i18n="cover.startRec">Start Recording →</span></button>
+          <div class="step-desc" data-i18n="cover.phase1desc">Record 3-10 min of clean dry vocals.</div>
+          <button class="btn btn-outline btn-sm" onclick="switchTab('record')"><span data-i18n="cover.startRec">Record →</span></button>
         </div>
         <div class="step-card" data-color="green">
           <div class="step-num" data-i18n="cover.phase2num">Phase 02 — Install</div>
-          <div class="step-desc" data-i18n="cover.phase2desc">Deploy RVC WebUI for voice model training pipeline.</div>
+          <div class="step-desc" data-i18n="cover.phase2desc">Deploy RVC WebUI for training.</div>
           <button class="btn btn-success btn-sm" onclick="installRVC()"><span data-i18n="cover.installRVC">Install RVC</span></button>
         </div>
         <div class="step-card" data-color="amber">
           <div class="step-num" data-i18n="cover.phase3num">Phase 03 — Train</div>
-          <div class="step-desc" data-i18n="cover.phase3desc">Upload audio in RVC → Train → Export model (.pth).</div>
-          <div class="step-note" data-i18n="cover.phase3note">~10-30 MIN DEPENDING ON GPU</div>
+          <div class="step-desc" data-i18n="cover.phase3desc">Upload audio → Train → Export model.</div>
+          <div class="step-note" data-i18n="cover.phase3note">~10-30 min depending on GPU</div>
         </div>
         <div class="step-card" data-color="red">
           <div class="step-num" data-i18n="cover.phase4num">Phase 04 — Revoice</div>
-          <div class="step-desc" data-i18n="cover.phase4desc">Upload song → select your model → generate cover.</div>
-          <button class="btn btn-outline btn-sm" onclick="switchTab('tts')"><span data-i18n="cover.tryClone">Try VoxCPM Clone →</span></button>
+          <div class="step-desc" data-i18n="cover.phase4desc">Upload song → select model → generate.</div>
+          <button class="btn btn-outline btn-sm" onclick="switchTab('tts')"><span data-i18n="cover.tryClone">Try Clone →</span></button>
         </div>
       </div>
     </div>
 
     <div class="card" id="rvcInstallCard" style="display:none;">
-      <div class="card-title" data-i18n="cover.installLog">Installation Log</div>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+        <span data-i18n="cover.installLog">Installation Log</span>
+      </div>
       <div class="terminal-log" id="rvcInstallLog" data-i18n="cover.awaitInit">Awaiting initialization...</div>
-      <div class="progress-track" style="margin-top:12px;">
+      <div class="progress-track" style="margin-top:10px;">
         <div class="progress-fill" id="rvcProgressFill" style="width:0%"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title" data-i18n="cover.quickTitle">Quick Revoice (VoxCPM Sim)</div>
-      <p style="color:var(--text-secondary); font-size:12px; margin-bottom:16px; letter-spacing:0.5px;" data-i18n="cover.quickDesc">
-        No RVC needed — VoxCPM reads lyrics in your cloned voice directly.
-      </p>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span data-i18n="cover.quickTitle">Quick Revoice</span>
+      </div>
       <div class="form-group">
         <label data-i18n="cover.voiceProfile">Voice Profile</label>
         <select id="coverPromptWav"></select>
@@ -196,14 +207,17 @@
       </div>
       <div class="form-group">
         <label data-i18n="cover.lyrics">Lyrics (one line per segment)</label>
-        <textarea id="coverLyrics" rows="6" placeholder="你问我爱你有多深&#10;我爱你有几分&#10;我的情也真&#10;我的爱也真&#10;月亮代表我的心"></textarea>
+        <textarea id="coverLyrics" rows="6" placeholder="你问我爱你有多深&#10;我爱你有几分"></textarea>
       </div>
       <div class="btn-row">
-        <button class="btn btn-primary" id="btnCoverGenerate" onclick="doCover()"><span data-i18n="cover.generate">▸ Generate Cover</span></button>
-        <button class="btn btn-outline" onclick="document.getElementById('coverLyrics').value=''"><span data-i18n="cover.clear">Clear</span></button>
+        <button class="btn btn-primary" id="btnCoverGenerate" onclick="doCover()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span data-i18n="cover.generate">Generate Cover</span>
+        </button>
+        <button class="btn btn-outline" onclick="document.getElementById('coverLyrics').value=''">Clear</button>
       </div>
       <div id="coverProgress" style="display:none; margin-top:16px;">
-        <div style="display:flex; justify-content:space-between;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
           <span class="range-label" id="coverMsg">Processing...</span>
           <span class="range-value" id="coverPercent">0%</span>
         </div>
@@ -214,7 +228,6 @@
   </div>
 
 </div>
-
 <script src="/static/app.js"></script>
 </body>
 </html>
