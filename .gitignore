@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Model cache
+.cache/
+
+# Generated files
+output/
+uploads/
+server.log
+
+# RVC cloned repo
+RVC/Retrieval-based-Voice-Conversion-WebUI/
+
+# OS
+.DS_Store
+Thumbs.db

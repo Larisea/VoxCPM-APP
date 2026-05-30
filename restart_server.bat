@@ -1,0 +1,9 @@
+@echo off
+echo Stopping old server...
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8868 ^| findstr LISTENING') do (
+    taskkill /F /PID %%a 2>nul
+)
+echo Starting VoxCPM Web Server...
+start /B python "%~dp0app_server.py" > "%~dp0server.log" 2>&1
+echo Server starting in background...
+echo Wait ~15 seconds for model to load, then visit http://localhost:8868

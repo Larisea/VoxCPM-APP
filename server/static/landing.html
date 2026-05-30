@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoxCPM — One Voice. Infinite Possibilities.</title>
+<link rel="stylesheet" href="/static/landing.css">
+</head>
+<body>
+
+  <!-- ═══ Nav ═══ -->
+  <nav class="nav" id="nav">
+    <a class="nav-brand" href="/">Vox<span>CPM</span></a>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="langEn" onclick="setLandingLang('en')">EN</button>
+        <button class="lang-btn" id="langZh" onclick="setLandingLang('zh')">中</button>
+      </div>
+      <a class="nav-cta" href="/app" data-i18n="nav">Launch App</a>
+    </div>
+  </nav>
+
+  <!-- ═══ Hero ═══ -->
+  <section class="hero">
+    <div class="hero-badge reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+      <span data-i18n="badge">Neural Voice Synthesis</span>
+    </div>
+
+    <h1 class="hero-title reveal reveal-d1">
+      <span data-i18n="title1">One Voice.</span><br>
+      <span data-i18n="title2">Infinite Possibilities.</span>
+    </h1>
+
+    <p class="hero-desc reveal reveal-d2" data-i18n="desc">
+      Open-source voice cloning and text-to-speech. Clone any voice from a short audio sample, synthesize natural speech, and create AI covers — all running locally.
+    </p>
+
+    <div class="hero-actions reveal reveal-d3">
+      <a class="btn-primary" href="/app">
+        <span data-i18n="cta">Launch Application</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a class="btn-secondary" href="https://github.com/OpenBMB/VoxCPM" target="_blank">
+        <span data-i18n="ctaSecondary">View on GitHub</span>
+      </a>
+    </div>
+
+    <div class="wave-wrap reveal reveal-d4">
+      <canvas id="waveform"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══ Features ═══ -->
+  <section class="section" id="features">
+    <div class="section-label reveal" data-i18n="featTitle">Everything you need</div>
+    <h2 class="section-title reveal">Core Capabilities</h2>
+
+    <div class="feat-grid">
+      <div class="feat-card reveal reveal-d1">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+        </div>
+        <div class="feat-title" data-i18n="feat1t">Text-to-Speech</div>
+        <p class="feat-desc" data-i18n="feat1d">Natural speech synthesis from text. Fine-tune with CFG scale and inference steps for perfect prosody.</p>
+      </div>
+
+      <div class="feat-card reveal reveal-d2">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="feat-title" data-i18n="feat2t">Voice Clone</div>
+        <p class="feat-desc" data-i18n="feat2d">Upload a short reference audio and transcript. VoxCPM clones the voice for any new text.</p>
+      </div>
+
+      <div class="feat-card reveal reveal-d3">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        </div>
+        <div class="feat-title" data-i18n="feat3t">Audio Capture</div>
+        <p class="feat-desc" data-i18n="feat3d">Record reference audio in the browser. Built-in WebM-to-WAV conversion included.</p>
+      </div>
+
+      <div class="feat-card reveal reveal-d4">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <div class="feat-title" data-i18n="feat4t">Revoice</div>
+        <p class="feat-desc" data-i18n="feat4d">Paste lyrics, pick your cloned voice, generate song covers line by line.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ How It Works ═══ -->
+  <section class="section" id="how">
+    <h2 class="section-title reveal" data-i18n="howTitle">How it works</h2>
+
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text" data-i18n="step1">Record or upload a reference voice</div>
+      </div>
+      <div class="step-connector">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text" data-i18n="step2">Input your text or lyrics</div>
+      </div>
+      <div class="step-connector">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text" data-i18n="step3">Generate with your cloned voice</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="cta-section reveal">
+    <h2 class="section-title" data-i18n="ctaTitle">Start creating with your voice</h2>
+    <p class="cta-desc" data-i18n="ctaDesc">Free and open source. Runs on a 6GB GPU.</p>
+    <a class="btn-primary" href="/app">
+      <span data-i18n="cta">Launch Application</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="footer">
+    <div class="footer-brand">VoxCPM</div>
+    <p class="footer-desc" data-i18n="footerDesc">Powered by VoxCPM1.5</p>
+    <a class="footer-link" href="/app" data-i18n="footerLink">Open Application →</a>
+  </footer>
+
+  <script src="/static/landing.js"></script>
+</body>
+</html>
