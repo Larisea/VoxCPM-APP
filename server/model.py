@@ -26,7 +26,15 @@ def get_model():
         with _model_lock:
             if _model is None:
                 print("[模型] 加载 VoxCPM1.5 ...")
-                from voxcpm import VoxCPM
+                try:
+                    from voxcpm import VoxCPM
+                except ModuleNotFoundError:
+                    raise RuntimeError(
+                        "voxcpm 模块未安装。请先安装依赖：\n"
+                        "  pip install voxcpm>=1.5.0\n\n"
+                        "或运行：\n"
+                        "  pip install -r requirements.txt"
+                    )
                 _model = VoxCPM.from_pretrained(
                     MODEL_NAME,
                     load_denoiser=False,

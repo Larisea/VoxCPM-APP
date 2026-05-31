@@ -29,10 +29,22 @@
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('tts')" data-i18n="tab.tts">Synthesis</button>
-    <button class="tab" onclick="switchTab('reference')" data-i18n="tab.voicebank">Voice Bank</button>
-    <button class="tab" onclick="switchTab('record')" data-i18n="tab.capture">Capture</button>
-    <button class="tab" onclick="switchTab('cover')" data-i18n="tab.revoice">Revoice</button>
+    <button class="tab active" onclick="switchTab('tts')" data-i18n="tab.tts">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+      Synthesis
+    </button>
+    <button class="tab" onclick="switchTab('reference')" data-i18n="tab.voicebank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+      Voice Bank
+    </button>
+    <button class="tab" onclick="switchTab('record')" data-i18n="tab.capture">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+      Capture
+    </button>
+    <button class="tab" onclick="switchTab('cover')" data-i18n="tab.revoice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      Revoice
+    </button>
   </div>
 
   <!-- ═══ TTS ═══ -->
@@ -152,35 +164,235 @@
 
   <!-- ═══ Cover ═══ -->
   <div id="tab-cover" class="tab-content" style="display:none;">
-    <div class="card">
+    <!-- 引导说明 -->
+    <div class="card" style="margin-bottom:16px;">
       <div class="card-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        <span data-i18n="cover.title">Revoice Studio</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <span data-i18n="cover.guideTitle">How It Works</span>
       </div>
-      <div class="step-grid" style="margin-bottom:20px;">
-        <div class="step-card" data-color="cyan">
-          <div class="step-num" data-i18n="cover.phase1num">Phase 01 — Acquire</div>
-          <div class="step-desc" data-i18n="cover.phase1desc">Record 3-10 min of clean dry vocals.</div>
-          <button class="btn btn-outline btn-sm" onclick="switchTab('record')"><span data-i18n="cover.startRec">Record →</span></button>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="guide-step-num">01</div>
+          <div class="guide-step-content">
+            <div class="guide-step-title" data-i18n="cover.guide1Title">Record Your Voice</div>
+            <div class="guide-step-desc" data-i18n="cover.guide1Desc">Capture 3-10 minutes of clean dry vocals. Multiple short clips work too.</div>
+          </div>
         </div>
-        <div class="step-card" data-color="green">
-          <div class="step-num" data-i18n="cover.phase2num">Phase 02 — Install</div>
-          <div class="step-desc" data-i18n="cover.phase2desc">Deploy RVC WebUI for training.</div>
-          <button class="btn btn-success btn-sm" onclick="installRVC()"><span data-i18n="cover.installRVC">Install RVC</span></button>
+        <div class="guide-step">
+          <div class="guide-step-num">02</div>
+          <div class="guide-step-content">
+            <div class="guide-step-title" data-i18n="cover.guide2Title">Train Voice Model</div>
+            <div class="guide-step-desc" data-i18n="cover.guide2Desc">Upload audio → Set parameters → Start training. Takes ~10-30 min.</div>
+          </div>
         </div>
-        <div class="step-card" data-color="amber">
-          <div class="step-num" data-i18n="cover.phase3num">Phase 03 — Train</div>
-          <div class="step-desc" data-i18n="cover.phase3desc">Upload audio → Train → Export model.</div>
-          <div class="step-note" data-i18n="cover.phase3note">~10-30 min depending on GPU</div>
+        <div class="guide-step">
+          <div class="guide-step-num">03</div>
+          <div class="guide-step-content">
+            <div class="guide-step-title" data-i18n="cover.guide3Title">Select Model</div>
+            <div class="guide-step-desc" data-i18n="cover.guide3Desc">Choose your trained model from the list for voice conversion.</div>
+          </div>
         </div>
-        <div class="step-card" data-color="red">
-          <div class="step-num" data-i18n="cover.phase4num">Phase 04 — Revoice</div>
-          <div class="step-desc" data-i18n="cover.phase4desc">Upload song → select model → generate.</div>
-          <button class="btn btn-outline btn-sm" onclick="switchTab('tts')"><span data-i18n="cover.tryClone">Try Clone →</span></button>
+        <div class="guide-step">
+          <div class="guide-step-num">04</div>
+          <div class="guide-step-content">
+            <div class="guide-step-title" data-i18n="cover.guide4Title">Generate Cover</div>
+            <div class="guide-step-desc" data-i18n="cover.guide4Desc">Upload a song → Select model → Generate your AI cover!</div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- RVC翻唱工作室 -->
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span data-i18n="cover.rvcTitle">RVC Revoice Studio</span>
+      </div>
+
+      <!-- 进度条 -->
+      <div class="wizard-progress">
+        <div class="wizard-step active" data-step="1" onclick="wizardGoToStep(1)">
+          <div class="wizard-step-circle">1</div>
+          <div class="wizard-step-label" data-i18n="cover.wizStep1">Record</div>
+        </div>
+        <div class="wizard-step" data-step="2" onclick="wizardGoToStep(2)">
+          <div class="wizard-step-circle">2</div>
+          <div class="wizard-step-label" data-i18n="cover.wizStep2">Train</div>
+        </div>
+        <div class="wizard-step" data-step="3" onclick="wizardGoToStep(3)">
+          <div class="wizard-step-circle">3</div>
+          <div class="wizard-step-label" data-i18n="cover.wizStep3">Select</div>
+        </div>
+        <div class="wizard-step" data-step="4" onclick="wizardGoToStep(4)">
+          <div class="wizard-step-circle">4</div>
+          <div class="wizard-step-label" data-i18n="cover.wizStep4">Generate</div>
+        </div>
+      </div>
+
+      <!-- 步骤1：录制干声 -->
+      <div class="wizard-content active" id="wizard-step-1">
+        <p style="color:var(--text-secondary); font-size:13px; margin-bottom:16px;" data-i18n="cover.wizStep1Desc">
+          Record 3-10 minutes of clean dry vocals for training your voice model.
+        </p>
+        <div class="btn-row" style="margin-bottom:20px;">
+          <button class="btn btn-primary" onclick="switchTab('record')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+            <span data-i18n="cover.goRecord">Go to Recording</span>
+          </button>
+        </div>
+        <div style="border-top:1px solid var(--border); padding-top:20px;">
+          <div class="card-title" style="margin-bottom:12px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+            <span data-i18n="cover.orUpload">Or Upload Audio</span>
+          </div>
+          <div class="file-upload" id="wizardDropZone" onclick="document.getElementById('wizardAudioInput').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+            <p data-i18n="cover.dropAudio">Drop audio file or click to upload</p>
+            <p style="font-size:11px; margin-top:2px;">WAV / MP3 / FLAC — 3-10 min</p>
+            <input type="file" id="wizardAudioInput" accept=".wav,.mp3,.flac" onchange="wizardUploadAudio(event)" style="display:none;">
+          </div>
+          <div id="wizardUploadStatus"></div>
+        </div>
+        <div class="btn-row" style="justify-content:flex-end; margin-top:20px;">
+          <button class="btn btn-primary" onclick="wizardGoToStep(2)">
+            <span data-i18n="cover.nextTrain">Next: Train</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 步骤2：训练模型 -->
+      <div class="wizard-content" id="wizard-step-2">
+        <div class="form-group">
+          <label data-i18n="cover.trainAudio">Training Audio</label>
+          <select id="wizardTrainAudio">
+            <option value="" data-i18n="cover.selectAudio">-- Select Audio --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="cover.modelName">Model Name</label>
+          <input type="text" id="wizardModelName" placeholder="my_voice_model" value="my_voice_model">
+        </div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <div class="form-group" style="flex:1; min-width:140px;">
+            <label data-i18n="cover.epochs">Epochs</label>
+            <input type="number" id="wizardEpochs" value="200" min="50" max="1000">
+          </div>
+          <div class="form-group" style="flex:1; min-width:140px;">
+            <label data-i18n="cover.batchSize">Batch Size</label>
+            <select id="wizardBatchSize">
+              <option value="4">4 (Low VRAM)</option>
+              <option value="8" selected>8 (Recommended)</option>
+              <option value="16">16 (High VRAM)</option>
+            </select>
+          </div>
+        </div>
+        <div style="background:var(--accent-light); border-radius:8px; padding:12px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-size:12px; color:var(--text-secondary);" data-i18n="cover.rvcStatus">RVC Status:</span>
+            <span class="status-badge" id="wizardRvcStatus" data-i18n="cover.checking">Checking...</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="wizardGoToStep(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span data-i18n="cover.prev">Previous</span>
+          </button>
+          <button class="btn btn-primary" onclick="wizardStartTraining()" id="wizardBtnTrain">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span data-i18n="cover.startTrain">Start Training</span>
+          </button>
+        </div>
+        <div id="wizardTrainProgress" style="display:none; margin-top:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span class="range-label" id="wizardTrainMsg" data-i18n="cover.training">Training...</span>
+            <span class="range-value" id="wizardTrainPercent">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="wizardTrainFill" style="width:0%"></div></div>
+          <div id="wizardTrainStatus" style="margin-top:8px; font-size:12px; color:var(--text-muted);"></div>
+        </div>
+        <div class="btn-row" style="justify-content:flex-end; margin-top:16px;">
+          <button class="btn btn-primary" onclick="wizardGoToStep(3)">
+            <span data-i18n="cover.nextSelect">Next: Select Model</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 步骤3：选择模型 -->
+      <div class="wizard-content" id="wizard-step-3">
+        <p style="color:var(--text-secondary); font-size:13px; margin-bottom:16px;" data-i18n="cover.selectModelDesc">
+          Select a trained model for voice conversion.
+        </p>
+        <div class="model-list" id="wizardModelList">
+          <div class="empty"><p data-i18n="cover.loading">Loading...</p></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="wizardGoToStep(2)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span data-i18n="cover.prev">Previous</span>
+          </button>
+          <button class="btn btn-primary" onclick="wizardGoToStep(4)" id="wizardBtnSelectModel" disabled>
+            <span data-i18n="cover.nextGenerate">Next: Generate</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 步骤4：生成翻唱 -->
+      <div class="wizard-content" id="wizard-step-4">
+        <div class="form-group">
+          <label data-i18n="cover.uploadSong">Upload Song</label>
+          <div class="file-upload" id="wizardSongDropZone" onclick="document.getElementById('wizardSongInput').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <p data-i18n="cover.dropSong">Drop song file or click to upload</p>
+            <p style="font-size:11px; margin-top:2px;">WAV / MP3 / FLAC</p>
+            <input type="file" id="wizardSongInput" accept=".wav,.mp3,.flac" onchange="wizardUploadSong(event)" style="display:none;">
+          </div>
+          <div id="wizardSongUploadStatus"></div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="cover.selectedModel">Selected Model</label>
+          <input type="text" id="wizardSelectedModel" readonly value="" placeholder="None selected">
+        </div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <div class="form-group" style="flex:1; min-width:140px;">
+            <label data-i18n="cover.pitch">Pitch Shift</label>
+            <input type="range" id="wizardPitch" min="-12" max="12" value="0" oninput="document.getElementById('wizardPitchVal').textContent=this.value">
+            <div class="range-label"><span id="wizardPitchVal" class="range-value">0</span></div>
+          </div>
+          <div class="form-group" style="flex:1; min-width:140px;">
+            <label data-i18n="cover.f0Method">F0 Method</label>
+            <select id="wizardF0Method">
+              <option value="rmvpe" selected>RMVPE (Recommended)</option>
+              <option value="pm">PM</option>
+              <option value="harvest">Harvest</option>
+              <option value="crepe">Crepe</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="wizardGoToStep(3)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span data-i18n="cover.prev">Previous</span>
+          </button>
+          <button class="btn btn-primary" onclick="wizardGenerateCover()" id="wizardBtnGenerate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span data-i18n="cover.genCover">Generate Cover</span>
+          </button>
+        </div>
+        <div id="wizardCoverProgress" style="display:none; margin-top:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span class="range-label" id="wizardCoverMsg" data-i18n="toast.synthesizing">Processing...</span>
+            <span class="range-value" id="wizardCoverPercent">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="wizardCoverFill" style="width:0%"></div></div>
+        </div>
+        <div id="wizardCoverResult"></div>
+      </div>
+    </div>
+
+    <!-- RVC安装 -->
     <div class="card" id="rvcInstallCard" style="display:none;">
       <div class="card-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
@@ -192,11 +404,15 @@
       </div>
     </div>
 
-    <div class="card">
+    <!-- Quick Revoice (VoxCPM模拟) -->
+    <div class="card" style="margin-top:16px;">
       <div class="card-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        <span data-i18n="cover.quickTitle">Quick Revoice</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+        <span data-i18n="cover.quickTitle">Quick Revoice (VoxCPM Sim)</span>
       </div>
+      <p style="color:var(--text-muted); font-size:12px; margin-bottom:16px;" data-i18n="cover.quickDesc">
+        No RVC needed — VoxCPM reads lyrics in your cloned voice directly.
+      </p>
       <div class="form-group">
         <label data-i18n="cover.voiceProfile">Voice Profile</label>
         <select id="coverPromptWav"></select>
@@ -214,11 +430,13 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span data-i18n="cover.generate">Generate Cover</span>
         </button>
-        <button class="btn btn-outline" onclick="document.getElementById('coverLyrics').value=''">Clear</button>
+        <button class="btn btn-outline" onclick="document.getElementById('coverLyrics').value=''">
+          <span data-i18n="cover.clear">Clear</span>
+        </button>
       </div>
       <div id="coverProgress" style="display:none; margin-top:16px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <span class="range-label" id="coverMsg">Processing...</span>
+          <span class="range-label" id="coverMsg" data-i18n="toast.synthesizing">Processing...</span>
           <span class="range-value" id="coverPercent">0%</span>
         </div>
         <div class="progress-track"><div class="progress-fill" id="coverFill" style="width:0%"></div></div>

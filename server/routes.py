@@ -46,11 +46,6 @@ def create_app():
         html_path = static_dir / "index.html"
         return HTMLResponse(html_path.read_text(encoding="utf-8"))
 
-    @app.get("/wizard", response_class=HTMLResponse)
-    async def wizard_page():
-        html_path = static_dir / "wizard.html"
-        return HTMLResponse(html_path.read_text(encoding="utf-8"))
-
     @app.get("/api/status")
     async def api_status():
         return {

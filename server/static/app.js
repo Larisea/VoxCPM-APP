@@ -29,6 +29,52 @@ const I18N = {
     'rec.hintDone': 'Recording complete — preview or save',
     'rec.recording': 'Recording... press to stop',
     'rec.save': '▸ Save to Voice Bank',
+    'cover.rvcTitle': 'RVC Revoice Studio',
+    'cover.guideTitle': 'How It Works',
+    'cover.guide1Title': 'Record Your Voice',
+    'cover.guide1Desc': 'Capture 3-10 minutes of clean dry vocals. Multiple short clips work too.',
+    'cover.guide2Title': 'Train Voice Model',
+    'cover.guide2Desc': 'Upload audio → Set parameters → Start training. Takes ~10-30 min.',
+    'cover.guide3Title': 'Select Model',
+    'cover.guide3Desc': 'Choose your trained model from the list for voice conversion.',
+    'cover.guide4Title': 'Generate Cover',
+    'cover.guide4Desc': 'Upload a song → Select model → Generate your AI cover!',
+    'cover.wizStep1': 'Record',
+    'cover.wizStep2': 'Train',
+    'cover.wizStep3': 'Select',
+    'cover.wizStep4': 'Generate',
+    'cover.wizStep1Desc': 'Record 3-10 minutes of clean dry vocals for training your voice model.',
+    'cover.goRecord': 'Go to Recording',
+    'cover.orUpload': 'Or Upload Audio',
+    'cover.dropAudio': 'Drop audio file or click to upload',
+    'cover.nextTrain': 'Next: Train',
+    'cover.trainAudio': 'Training Audio',
+    'cover.selectAudio': '-- Select Audio --',
+    'cover.modelName': 'Model Name',
+    'cover.epochs': 'Epochs',
+    'cover.batchSize': 'Batch Size',
+    'cover.rvcStatus': 'RVC Status:',
+    'cover.checking': 'Checking...',
+    'cover.prev': 'Previous',
+    'cover.startTrain': 'Start Training',
+    'cover.training': 'Training...',
+    'cover.startingTrain': 'Starting training...',
+    'cover.trainStarted': 'Training started',
+    'cover.trainFail': 'Training failed',
+    'cover.trainComplete': 'Training complete!',
+    'cover.nextSelect': 'Next: Select Model',
+    'cover.selectModelDesc': 'Select a trained model for voice conversion.',
+    'cover.loading': 'Loading...',
+    'cover.noModels': 'No models available. Train one first.',
+    'cover.nextGenerate': 'Next: Generate',
+    'cover.uploadSong': 'Upload Song',
+    'cover.dropSong': 'Drop song file or click to upload',
+    'cover.selectedModel': 'Selected Model',
+    'cover.pitch': 'Pitch Shift',
+    'cover.f0Method': 'F0 Method',
+    'cover.genCover': 'Generate Cover',
+    'cover.selectModelFirst': 'Please select a model first',
+    'cover.uploadSongFirst': 'Please upload a song first',
     'cover.title': 'Revoice Studio',
     'cover.desc': 'Train a voice model via RVC, then replace vocals in any song with your own voice.',
     'cover.phase1num': 'Phase 01 — Acquire',
@@ -124,6 +170,52 @@ const I18N = {
     'rec.hintDone': '录制完成，可以预览或保存',
     'rec.recording': '录制中... 点击停止',
     'rec.save': '▸ 保存到声音库',
+    'cover.rvcTitle': 'RVC 翻唱工作室',
+    'cover.guideTitle': '使用说明',
+    'cover.guide1Title': '录制你的声音',
+    'cover.guide1Desc': '录制 3-10 分钟清晰干声，多个短音频也可以。',
+    'cover.guide2Title': '训练声音模型',
+    'cover.guide2Desc': '上传音频 → 设置参数 → 开始训练，约 10-30 分钟。',
+    'cover.guide3Title': '选择模型',
+    'cover.guide3Desc': '从列表中选择已训练的模型用于声音转换。',
+    'cover.guide4Title': '生成翻唱',
+    'cover.guide4Desc': '上传歌曲 → 选择模型 → 生成你的 AI 翻唱！',
+    'cover.wizStep1': '录制',
+    'cover.wizStep2': '训练',
+    'cover.wizStep3': '选择',
+    'cover.wizStep4': '生成',
+    'cover.wizStep1Desc': '录制 3-10 分钟清晰干声，用于训练你的声音模型。',
+    'cover.goRecord': '去录制',
+    'cover.orUpload': '或上传音频',
+    'cover.dropAudio': '拖拽音频文件或点击上传',
+    'cover.nextTrain': '下一步：训练',
+    'cover.trainAudio': '训练音频',
+    'cover.selectAudio': '-- 选择音频 --',
+    'cover.modelName': '模型名称',
+    'cover.epochs': '训练轮数',
+    'cover.batchSize': '批次大小',
+    'cover.rvcStatus': 'RVC 状态：',
+    'cover.checking': '检测中...',
+    'cover.prev': '上一步',
+    'cover.startTrain': '开始训练',
+    'cover.training': '训练中...',
+    'cover.startingTrain': '正在启动训练...',
+    'cover.trainStarted': '训练已启动',
+    'cover.trainFail': '训练失败',
+    'cover.trainComplete': '训练完成！',
+    'cover.nextSelect': '下一步：选择模型',
+    'cover.selectModelDesc': '选择一个训练好的模型用于翻唱。',
+    'cover.loading': '加载中...',
+    'cover.noModels': '暂无模型，请先训练。',
+    'cover.nextGenerate': '下一步：生成',
+    'cover.uploadSong': '上传歌曲',
+    'cover.dropSong': '拖拽歌曲文件或点击上传',
+    'cover.selectedModel': '已选模型',
+    'cover.pitch': '音调调整',
+    'cover.f0Method': 'F0 提取方法',
+    'cover.genCover': '生成翻唱',
+    'cover.selectModelFirst': '请先选择模型',
+    'cover.uploadSongFirst': '请先上传歌曲',
     'cover.title': '翻唱工作室',
     'cover.desc': '先通过 RVC 训练声音模型，然后将歌曲中的人声替换为你的声音。',
     'cover.phase1num': '阶段 01 — 采集',
@@ -975,3 +1067,379 @@ function installRVC() {
 // 启动
 // ============================================================
 init();
+
+// ============================================================
+// RVC翻唱向导功能
+// ============================================================
+let wizardCurrentStep = 1;
+let wizardSelectedModelName = '';
+let wizardUploadedSongPath = '';
+
+function wizardGoToStep(step) {
+    wizardCurrentStep = step;
+    
+    // 更新步骤内容显示
+    document.querySelectorAll('.wizard-content').forEach(el => el.classList.remove('active'));
+    document.getElementById('wizard-step-' + step).classList.add('active');
+    
+    // 更新进度条
+    document.querySelectorAll('.wizard-step').forEach(el => {
+        const s = parseInt(el.dataset.step);
+        el.classList.remove('active', 'completed');
+        if (s === step) el.classList.add('active');
+        else if (s < step) el.classList.add('completed');
+    });
+    
+    // 切换到特定步骤时执行初始化
+    if (step === 2) {
+        wizardLoadAudioList();
+        wizardCheckRvcStatus();
+    } else if (step === 3) {
+        wizardLoadModels();
+    }
+}
+
+async function wizardCheckRvcStatus() {
+    try {
+        const res = await fetch('/api/rvc/status');
+        const data = await res.json();
+        const statusEl = document.getElementById('wizardRvcStatus');
+        if (data.status === 'online') {
+            statusEl.textContent = t('status.online');
+            statusEl.className = 'status-badge status-online';
+        } else {
+            statusEl.textContent = t('status.offline');
+            statusEl.className = 'status-badge status-offline';
+        }
+    } catch (e) {
+        const statusEl = document.getElementById('wizardRvcStatus');
+        statusEl.textContent = t('status.noConn');
+        statusEl.className = 'status-badge status-offline';
+    }
+}
+
+async function wizardUploadAudio(event) {
+    const files = event.target.files;
+    if (files.length === 0) return;
+    
+    const statusEl = document.getElementById('wizardUploadStatus');
+    const file = files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    statusEl.innerHTML = `<p style="color:var(--accent); font-size:12px;">${t('toast.uploading')}: ${file.name}...</p>`;
+    
+    try {
+        const res = await fetch('/api/upload_reference', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
+            statusEl.innerHTML = `<p style="color:var(--green); font-size:12px;">✓ ${t('toast.uploaded')}: ${data.filename}</p>`;
+            toast(t('toast.uploaded'), 'success');
+        } else {
+            statusEl.innerHTML = `<p style="color:var(--red); font-size:12px;">✗ ${t('toast.uploadFail')}: ${data.error}</p>`;
+            toast(t('toast.uploadFail') + ': ' + data.error, 'error');
+        }
+    } catch (e) {
+        statusEl.innerHTML = `<p style="color:var(--red); font-size:12px;">✗ ${t('toast.uploadFail')}</p>`;
+        toast(t('toast.uploadFail'), 'error');
+    }
+    
+    event.target.value = '';
+}
+
+async function wizardLoadAudioList() {
+    try {
+        const res = await fetch('/api/reference_audios');
+        const data = await res.json();
+        const select = document.getElementById('wizardTrainAudio');
+        select.innerHTML = `<option value="">${t('cover.selectAudio')}</option>`;
+        data.files.forEach(f => {
+            select.innerHTML += `<option value="${f.path}">${f.name} (${f.size_kb}KB)</option>`;
+        });
+    } catch (e) {
+        console.error('Failed to load audio list', e);
+    }
+}
+
+async function wizardStartTraining() {
+    const audioPath = document.getElementById('wizardTrainAudio').value;
+    const modelName = document.getElementById('wizardModelName').value.trim();
+    const epochs = document.getElementById('wizardEpochs').value;
+    const batchSize = document.getElementById('wizardBatchSize').value;
+    
+    if (!audioPath) {
+        toast(t('cover.selectAudio'), 'error');
+        return;
+    }
+    if (!modelName) {
+        toast(t('cover.enterModelName'), 'error');
+        return;
+    }
+    
+    const btn = document.getElementById('wizardBtnTrain');
+    btn.disabled = true;
+    btn.innerHTML = `<span>${t('cover.training')}</span>`;
+    
+    document.getElementById('wizardTrainProgress').style.display = 'block';
+    document.getElementById('wizardTrainPercent').textContent = '0%';
+    document.getElementById('wizardTrainFill').style.width = '0%';
+    document.getElementById('wizardTrainStatus').textContent = t('cover.startingTrain');
+    
+    try {
+        const formData = new FormData();
+        formData.append('audio_path', audioPath);
+        formData.append('model_name', modelName);
+        formData.append('epochs', epochs);
+        formData.append('batch_size', batchSize);
+        
+        const res = await fetch('/api/rvc/train', { method: 'POST', body: formData });
+        const data = await res.json();
+        
+        if (data.status === 'training_started') {
+            toast(t('cover.trainStarted'), 'success');
+            wizardPollTrainingStatus();
+        } else {
+            toast(t('cover.trainFail') + ': ' + (data.error || ''), 'error');
+            btn.disabled = false;
+            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${t('cover.startTrain')}</span>`;
+        }
+    } catch (e) {
+        toast(t('cover.trainFail'), 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${t('cover.startTrain')}</span>`;
+    }
+}
+
+async function wizardPollTrainingStatus() {
+    const interval = setInterval(async () => {
+        try {
+            const res = await fetch('/api/rvc/training_status');
+            const data = await res.json();
+            
+            if (data.status === 'training') {
+                const progress = data.progress || 0;
+                document.getElementById('wizardTrainPercent').textContent = progress + '%';
+                document.getElementById('wizardTrainFill').style.width = progress + '%';
+                document.getElementById('wizardTrainStatus').textContent = 
+                    `Epoch: ${data.epoch || 0}/${data.total_epochs || '?'}`;
+            } else if (data.status === 'completed') {
+                clearInterval(interval);
+                document.getElementById('wizardTrainPercent').textContent = '100%';
+                document.getElementById('wizardTrainFill').style.width = '100%';
+                document.getElementById('wizardTrainStatus').textContent = t('cover.trainComplete');
+                toast(t('cover.trainComplete'), 'success');
+                
+                const btn = document.getElementById('wizardBtnTrain');
+                btn.disabled = false;
+                btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${t('cover.startTrain')}</span>`;
+            } else if (data.status === 'error') {
+                clearInterval(interval);
+                document.getElementById('wizardTrainStatus').textContent = t('cover.trainFail') + ': ' + (data.error || '');
+                toast(t('cover.trainFail'), 'error');
+                
+                const btn = document.getElementById('wizardBtnTrain');
+                btn.disabled = false;
+                btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${t('cover.startTrain')}</span>`;
+            }
+        } catch (e) {
+            console.error('Failed to get training status', e);
+        }
+    }, 2000);
+}
+
+async function wizardLoadModels() {
+    try {
+        const res = await fetch('/api/rvc/models');
+        const data = await res.json();
+        const list = document.getElementById('wizardModelList');
+        
+        if (data.models && data.models.length > 0) {
+            list.innerHTML = data.models.map(m => `
+                <div class="model-item" onclick="wizardSelectModel('${m.name}')" id="wizard-model-${m.name.replace(/\./g, '-')}">
+                    <div>
+                        <div class="model-name">${m.name}</div>
+                        <div class="model-size">${m.size ? (m.size / 1024 / 1024).toFixed(2) + ' MB' : ''}</div>
+                    </div>
+                    <div class="model-actions">
+                        <button class="btn btn-danger btn-sm" onclick="wizardDeleteModel('${m.name}', event)">${t('toast.deletedBtn')}</button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            list.innerHTML = `<div class="empty"><p>${t('cover.noModels')}</p></div>`;
+        }
+    } catch (e) {
+        document.getElementById('wizardModelList').innerHTML = `<div class="empty"><p>${t('toast.loadFail')}</p></div>`;
+    }
+}
+
+function wizardSelectModel(name) {
+    wizardSelectedModelName = name;
+    document.getElementById('wizardSelectedModel').value = name;
+    document.getElementById('wizardBtnSelectModel').disabled = false;
+    
+    document.querySelectorAll('.model-item').forEach(el => el.classList.remove('selected'));
+    const el = document.getElementById(`wizard-model-${name.replace(/\./g, '-')}`);
+    if (el) el.classList.add('selected');
+}
+
+async function wizardDeleteModel(name, event) {
+    event.stopPropagation();
+    if (!confirm(`Delete model ${name}?`)) return;
+    
+    try {
+        const res = await fetch(`/api/rvc/models/${name}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.status === 'deleted') {
+            toast(t('toast.deleted'), 'success');
+            wizardLoadModels();
+        } else {
+            toast(t('toast.delFail') + ': ' + (data.error || ''), 'error');
+        }
+    } catch (e) {
+        toast(t('toast.delFail'), 'error');
+    }
+}
+
+async function wizardUploadSong(event) {
+    const files = event.target.files;
+    if (files.length === 0) return;
+    
+    const statusEl = document.getElementById('wizardSongUploadStatus');
+    const file = files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    statusEl.innerHTML = `<p style="color:var(--accent); font-size:12px;">${t('toast.uploading')}: ${file.name}...</p>`;
+    
+    try {
+        const res = await fetch('/api/upload_reference', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
+            statusEl.innerHTML = `<p style="color:var(--green); font-size:12px;">✓ ${data.filename}</p>`;
+            wizardUploadedSongPath = data.filename;
+            toast(t('toast.uploaded'), 'success');
+        } else {
+            statusEl.innerHTML = `<p style="color:var(--red); font-size:12px;">✗ ${t('toast.uploadFail')}: ${data.error}</p>`;
+            toast(t('toast.uploadFail') + ': ' + data.error, 'error');
+        }
+    } catch (e) {
+        statusEl.innerHTML = `<p style="color:var(--red); font-size:12px;">✗ ${t('toast.uploadFail')}</p>`;
+        toast(t('toast.uploadFail'), 'error');
+    }
+    
+    event.target.value = '';
+}
+
+async function wizardGenerateCover() {
+    if (!wizardSelectedModelName) {
+        toast(t('cover.selectModelFirst'), 'error');
+        return;
+    }
+    
+    const songInput = document.getElementById('wizardSongInput');
+    if (songInput.files.length === 0) {
+        toast(t('cover.uploadSongFirst'), 'error');
+        return;
+    }
+    
+    const btn = document.getElementById('wizardBtnGenerate');
+    btn.disabled = true;
+    btn.innerHTML = `<span>${t('toast.synthesizing')}</span>`;
+    
+    document.getElementById('wizardCoverProgress').style.display = 'block';
+    document.getElementById('wizardCoverPercent').textContent = '0%';
+    document.getElementById('wizardCoverFill').style.width = '0%';
+    document.getElementById('wizardCoverMsg').textContent = t('toast.synthesizing');
+    
+    try {
+        const formData = new FormData();
+        formData.append('file', songInput.files[0]);
+        formData.append('model_name', wizardSelectedModelName);
+        formData.append('pitch', document.getElementById('wizardPitch').value);
+        formData.append('f0_method', document.getElementById('wizardF0Method').value);
+        
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 5;
+            if (progress <= 90) {
+                document.getElementById('wizardCoverPercent').textContent = progress + '%';
+                document.getElementById('wizardCoverFill').style.width = progress + '%';
+            }
+        }, 500);
+        
+        const res = await fetch('/api/rvc/voice_change', { method: 'POST', body: formData });
+        const data = await res.json();
+        
+        clearInterval(progressInterval);
+        
+        if (data.status === 'success') {
+            document.getElementById('wizardCoverPercent').textContent = '100%';
+            document.getElementById('wizardCoverFill').style.width = '100%';
+            document.getElementById('wizardCoverMsg').textContent = t('toast.synthComplete');
+            
+            const audioPath = data.audio_path.split('/').pop();
+            document.getElementById('wizardCoverResult').innerHTML = `
+                <div class="result-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:var(--green); font-weight:600; font-size:13px;">${t('toast.synthComplete')}</span>
+                        <a class="btn btn-outline btn-sm" href="/output/${audioPath}" download>${t('toast.download')}</a>
+                    </div>
+                    <audio controls src="/output/${audioPath}" style="width:100%; margin-top:8px;"></audio>
+                </div>
+            `;
+            
+            toast(t('toast.synthComplete'), 'success');
+        } else {
+            document.getElementById('wizardCoverMsg').textContent = t('toast.genFail');
+            toast(t('toast.genFail') + ': ' + (data.error || ''), 'error');
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${t('cover.genCover')}</span>`;
+    } catch (e) {
+        toast(t('toast.genFail'), 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${t('cover.genCover')}</span>`;
+    }
+}
+
+// 初始化wizard拖拽上传
+function initWizardDropZones() {
+    const wizardDropZone = document.getElementById('wizardDropZone');
+    if (wizardDropZone) {
+        wizardDropZone.addEventListener('dragover', e => { e.preventDefault(); wizardDropZone.classList.add('drag-over'); });
+        wizardDropZone.addEventListener('dragleave', () => wizardDropZone.classList.remove('drag-over'));
+        wizardDropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            wizardDropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files.length > 0) {
+                const input = document.getElementById('wizardAudioInput');
+                input.files = e.dataTransfer.files;
+                wizardUploadAudio({ target: input });
+            }
+        });
+    }
+    
+    const songDropZone = document.getElementById('wizardSongDropZone');
+    if (songDropZone) {
+        songDropZone.addEventListener('dragover', e => { e.preventDefault(); songDropZone.classList.add('drag-over'); });
+        songDropZone.addEventListener('dragleave', () => songDropZone.classList.remove('drag-over'));
+        songDropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            songDropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files.length > 0) {
+                const input = document.getElementById('wizardSongInput');
+                input.files = e.dataTransfer.files;
+                wizardUploadSong({ target: input });
+            }
+        });
+    }
+}
+
+// 在init函数中添加wizard初始化
+const originalInit = init;
+init = async function() {
+    await originalInit();
+    initWizardDropZones();
+};
