@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from .config import BASE_DIR, OUTPUT_DIR, REFERENCE_DIR, MAX_TEXT_LENGTH
 from .model import get_model, is_model_loaded, is_generating
 from .tasks import create_task, update_task, get_task, run_tts_task
+from . import rvc_client
 
 
 def _safe_path(directory: Path, filename: str) -> Path | None:
@@ -43,6 +44,11 @@ def create_app():
     @app.get("/app", response_class=HTMLResponse)
     async def app_page():
         html_path = static_dir / "index.html"
+        return HTMLResponse(html_path.read_text(encoding="utf-8"))
+
+    @app.get("/wizard", response_class=HTMLResponse)
+    async def wizard_page():
+        html_path = static_dir / "wizard.html"
         return HTMLResponse(html_path.read_text(encoding="utf-8"))
 
     @app.get("/api/status")
@@ -278,5 +284,89 @@ pause
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
+
+    # ---- RVC 翻唱功能 API ----
+
+    @app.get("/api/rvc/status")
+    async def api_rvc_status():
+        """检测RVC WebUI是否运行"""
+        return await rvc_client.check_rvc_status()
+
+    @app.post("/api/rvc/upload_audio")
+    async def api_rvc_upload_audio(file: UploadFile = File(...)):
+        """上传音频到RVC训练目录"""
+        if not file.filename:
+            return JSONResponse({"success": False, "error": "未选择文件"}, status_code=400)
+
+        # 保存到临时目录
+        temp_dir = BASE_DIR / "uploads" / "rvc"
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        temp_path = temp_dir / f"{uuid.uuid4().hex[:8]}_{file.filename}"
+
+        content = await file.read()
+        with open(temp_path, "wb") as f:
+            f.write(content)
+
+        # 上传到RVC
+        result = await rvc_client.upload_audio_to_rvc(str(temp_path))
+        return result
+
+    @app.post("/api/rvc/train")
+    async def api_rvc_train(
+        audio_path: str = Form(...),
+        model_name: str = Form(...),
+        epochs: int = Form(200),
+        batch_size: int = Form(8),
+    ):
+        """启动RVC训练任务"""
+        params = {
+            "epochs": epochs,
+            "batch_size": batch_size,
+        }
+        result = await rvc_client.start_training(audio_path, model_name, params)
+        return result
+
+    @app.get("/api/rvc/training_status")
+    async def api_rvc_training_status():
+        """获取训练状态"""
+        return await rvc_client.get_training_status()
+
+    @app.get("/api/rvc/models")
+    async def api_rvc_models():
+        """列出可用模型"""
+        return await rvc_client.list_models()
+
+    @app.delete("/api/rvc/models/{model_name}")
+    async def api_rvc_delete_model(model_name: str):
+        """删除模型"""
+        return await rvc_client.delete_model(model_name)
+
+    @app.post("/api/rvc/voice_change")
+    async def api_rvc_voice_change(
+        file: UploadFile = File(...),
+        model_name: str = Form(...),
+        pitch: int = Form(0),
+        f0_method: str = Form("rmvpe"),
+    ):
+        """翻唱生成"""
+        if not file.filename:
+            return JSONResponse({"success": False, "error": "未选择文件"}, status_code=400)
+
+        # 保存到临时目录
+        temp_dir = BASE_DIR / "uploads" / "rvc"
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        temp_path = temp_dir / f"{uuid.uuid4().hex[:8]}_{file.filename}"
+
+        content = await file.read()
+        with open(temp_path, "wb") as f:
+            f.write(content)
+
+        # 调用RVC进行翻唱
+        params = {
+            "pitch": pitch,
+            "f0_method": f0_method,
+        }
+        result = await rvc_client.voice_change(str(temp_path), model_name, params)
+        return result
 
     return app

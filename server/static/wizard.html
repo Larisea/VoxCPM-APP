@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RVC翻唱向导</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+.header {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    color: white;
+    padding: 20px 30px;
+}
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+.header p {
+    color: #cbd5e0;
+    margin-top: 5px;
+    font-size: 14px;
+}
+.wizard {
+    padding: 30px;
+}
+.progress-bar {
+    display: flex;
+    margin-bottom: 30px;
+    position: relative;
+}
+.progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    right: 40px;
+    height: 3px;
+    background: #e2e8f0;
+    z-index: 0;
+}
+.step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #718096;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+.step.active .step-circle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+.step.completed .step-circle {
+    background: #48bb78;
+    color: white;
+}
+.step-label {
+    font-size: 12px;
+    color: #718096;
+    font-weight: 500;
+}
+.step.active .step-label {
+    color: #2d3748;
+    font-weight: 600;
+}
+.step-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+.step-content.active {
+    display: block;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.card {
+    background: #f7fafc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+}
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.card-title svg {
+    width: 20px;
+    height: 20px;
+    color: #667eea;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 5px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+.btn-outline {
+    background: transparent;
+    border: 2px solid #e2e8f0;
+    color: #4a5568;
+}
+.btn-outline:hover:not(:disabled) {
+    border-color: #667eea;
+    color: #667eea;
+}
+.btn-success {
+    background: #48bb78;
+    color: white;
+}
+.btn-success:hover:not(:disabled) {
+    background: #38a169;
+}
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+}
+.btn-danger:hover:not(:disabled) {
+    background: #c53030;
+}
+.btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+.progress-track {
+    background: #e2e8f0;
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+}
+.model-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.model-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    background: white;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.model-item:hover {
+    border-color: #667eea;
+}
+.model-item.selected {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+.model-item .model-name {
+    font-weight: 500;
+    color: #2d3748;
+}
+.model-item .model-size {
+    font-size: 12px;
+    color: #718096;
+}
+.model-item .model-actions {
+    display: flex;
+    gap: 8px;
+}
+.audio-player {
+    width: 100%;
+    margin-top: 10px;
+}
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.status-online {
+    background: #c6f6d5;
+    color: #22543d;
+}
+.status-offline {
+    background: #fed7d7;
+    color: #742a2a;
+}
+.status-training {
+    background: #fefcbf;
+    color: #744210;
+}
+.upload-zone {
+    border: 2px dashed #cbd5e0;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.upload-zone:hover {
+    border-color: #667eea;
+    background: #f7fafc;
+}
+.upload-zone.drag-over {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+.upload-zone svg {
+    width: 48px;
+    height: 48px;
+    color: #a0aec0;
+    margin-bottom: 10px;
+}
+.upload-zone p {
+    color: #718096;
+    font-size: 14px;
+}
+.result-card {
+    background: #f0fff4;
+    border: 1px solid #c6f6d5;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+.toast.success { background: #48bb78; }
+.toast.error { background: #e53e3e; }
+.toast.info { background: #4299e1; }
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>RVC翻唱工作室</h1>
+        <p>从录制到翻唱，4步完成AI翻唱</p>
+    </div>
+    
+    <div class="wizard">
+        <!-- 进度条 -->
+        <div class="progress-bar">
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">录制干声</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">训练模型</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">选择模型</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">生成翻唱</div>
+            </div>
+        </div>
+        
+        <!-- 步骤1：录制干声 -->
+        <div class="step-content active" id="step-1">
+            <div class="card">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                    录制干声音频
+                </div>
+                <p style="color: #718096; margin-bottom: 15px;">
+                    录制3-10分钟清晰的干声（无背景噪音），用于训练你的声音模型。
+                </p>
+                
+                <div class="form-group">
+                    <label>朗读文本</label>
+                    <textarea id="recordText" placeholder="请输入朗读文本...">今天天气真好，阳光明媚，微风轻拂，是个适合出门散步的好日子。</textarea>
+                </div>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <button class="btn btn-primary btn-lg" onclick="toggleRecord()" id="recBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                        开始录制
+                    </button>
+                    <div id="recTimer" style="margin-top: 10px; font-size: 24px; font-weight: 600; color: #2d3748;">00:00</div>
+                </div>
+                
+                <audio id="recPreview" controls style="width: 100%; display: none;"></audio>
+                
+                <div class="btn-row" style="justify-content: center;">
+                    <button class="btn btn-success" id="btnSaveRec" onclick="saveRecording()" style="display: none;">
+                        保存到声音库
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    或上传音频文件
+                </div>
+                <div class="upload-zone" id="dropZone" onclick="document.getElementById('audioInput').click()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    <p>拖拽音频文件或点击上传</p>
+                    <p style="font-size: 12px; color: #a0aec0;">WAV / MP3 / FLAC — 3-10分钟</p>
+                    <input type="file" id="audioInput" accept=".wav,.mp3,.flac" onchange="uploadAudio(event)" style="display: none;">
+                </div>
+                <div id="uploadStatus"></div>
+            </div>
+            
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="goToStep(2)">
+                    下一步：训练模型
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 步骤2：训练模型 -->
+        <div class="step-content" id="step-2">
+            <div class="card">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                    训练声音模型
+                </div>
+                
+                <div class="form-group">
+                    <label>选择训练音频</label>
+                    <select id="trainAudio">
+                        <option value="">-- 请选择音频 --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>模型名称</label>
+                    <input type="text" id="modelName" placeholder="my_voice_model" value="my_voice_model">
+                </div>
+                
+                <div class="form-group">
+                    <label>训练轮数 (Epochs)</label>
+                    <input type="number" id="epochs" value="200" min="50" max="1000">
+                </div>
+                
+                <div class="form-group">
+                    <label>批次大小 (Batch Size)</label>
+                    <select id="batchSize">
+                        <option value="4">4 (低显存)</option>
+                        <option value="8" selected>8 (推荐)</option>
+                        <option value="16">16 (高显存)</option>
+                    </select>
+                </div>
+                
+                <div style="background: #fefcbf; border-radius: 6px; padding: 12px; margin-bottom: 15px;">
+                    <p style="color: #744210; font-size: 13px;">
+                        <strong>注意：</strong>训练需要RVC WebUI运行。请先确保已启动RVC WebUI。
+                    </p>
+                    <div style="margin-top: 8px;">
+                        <span class="status-badge" id="rvcStatus">检测中...</span>
+                    </div>
+                </div>
+                
+                <div class="btn-row">
+                    <button class="btn btn-outline" onclick="goToStep(1)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        上一步
+                    </button>
+                    <button class="btn btn-primary" onclick="startTraining()" id="btnTrain">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        开始训练
+                    </button>
+                </div>
+                
+                <div id="trainingProgress" style="display: none; margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span class="range-label">训练中...</span>
+                        <span class="range-value" id="trainPercent">0%</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-fill" id="trainFill" style="width: 0%"></div></div>
+                    <div id="trainStatus" style="margin-top: 8px; font-size: 13px; color: #718096;"></div>
+                </div>
+            </div>
+            
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="goToStep(3)">
+                    下一步：选择模型
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 步骤3：选择模型 -->
+        <div class="step-content" id="step-3">
+            <div class="card">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                    选择声音模型
+                </div>
+                
+                <p style="color: #718096; margin-bottom: 15px;">
+                    选择一个训练好的模型用于翻唱生成。
+                </p>
+                
+                <div class="model-list" id="modelList">
+                    <div style="text-align: center; padding: 20px; color: #718096;">
+                        加载中...
+                    </div>
+                </div>
+                
+                <div class="btn-row">
+                    <button class="btn btn-outline" onclick="goToStep(2)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        上一步
+                    </button>
+                    <button class="btn btn-primary" onclick="goToStep(4)" id="btnSelectModel" disabled>
+                        下一步：生成翻唱
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 步骤4：生成翻唱 -->
+        <div class="step-content" id="step-4">
+            <div class="card">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                    生成翻唱
+                </div>
+                
+                <div class="form-group">
+                    <label>选择歌曲文件</label>
+                    <div class="upload-zone" id="songDropZone" onclick="document.getElementById('songInput').click()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                        <p>拖拽歌曲文件或点击上传</p>
+                        <p style="font-size: 12px; color: #a0aec0;">WAV / MP3 / FLAC</p>
+                        <input type="file" id="songInput" accept=".wav,.mp3,.flac" onchange="uploadSong(event)" style="display: none;">
+                    </div>
+                    <div id="songUploadStatus"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>已选择模型</label>
+                    <input type="text" id="selectedModel" readonly value="未选择">
+                </div>
+                
+                <div class="form-group">
+                    <label>音调调整 (Pitch)</label>
+                    <input type="range" id="pitch" min="-12" max="12" value="0" oninput="document.getElementById('pitchVal').textContent=this.value">
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span style="font-size: 12px; color: #718096;">-12</span>
+                        <span id="pitchVal" style="font-weight: 600; color: #2d3748;">0</span>
+                        <span style="font-size: 12px; color: #718096;">+12</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>F0提取方法</label>
+                    <select id="f0Method">
+                        <option value="rmvpe" selected>RMVPE (推荐)</option>
+                        <option value="pm">PM</option>
+                        <option value="harvest">Harvest</option>
+                        <option value="crepe">Crepe</option>
+                    </select>
+                </div>
+                
+                <div class="btn-row">
+                    <button class="btn btn-outline" onclick="goToStep(3)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        上一步
+                    </button>
+                    <button class="btn btn-primary" onclick="generateCover()" id="btnGenerate">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        生成翻唱
+                    </button>
+                </div>
+                
+                <div id="coverProgress" style="display: none; margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span class="range-label" id="coverMsg">处理中...</span>
+                        <span class="range-value" id="coverPercent">0%</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-fill" id="coverFill" style="width: 0%"></div></div>
+                </div>
+                
+                <div id="coverResult"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentStep = 1;
+let selectedModelName = '';
+let mediaRecorder = null;
+let audioChunks = [];
+let recStartTime = 0;
+let recTimerInterval = null;
+let recordedBlob = null;
+let uploadedAudioPath = '';
+let uploadedSongPath = '';
+
+// 步骤切换
+function goToStep(step) {
+    // 隐藏所有步骤内容
+    document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.step').forEach(el => {
+        el.classList.remove('active');
+        el.classList.remove('completed');
+    });
+    
+    // 显示目标步骤
+    document.getElementById(`step-${step}`).classList.add('active');
+    document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
+    
+    // 标记之前的步骤为已完成
+    for (let i = 1; i < step; i++) {
+        document.querySelector(`.step[data-step="${i}"]`).classList.add('completed');
+    }
+    
+    currentStep = step;
+    
+    // 切换到特定步骤时执行初始化
+    if (step === 2) {
+        loadAudioList();
+        checkRvcStatus();
+    } else if (step === 3) {
+        loadModels();
+    }
+}
+
+// 检查RVC状态
+async function checkRvcStatus() {
+    try {
+        const res = await fetch('/api/rvc/status');
+        const data = await res.json();
+        const statusEl = document.getElementById('rvcStatus');
+        if (data.status === 'online') {
+            statusEl.textContent = 'RVC WebUI 运行中';
+            statusEl.className = 'status-badge status-online';
+        } else {
+            statusEl.textContent = 'RVC WebUI 未运行';
+            statusEl.className = 'status-badge status-offline';
+        }
+    } catch (e) {
+        document.getElementById('rvcStatus').textContent = '检测失败';
+        document.getElementById('rvcStatus').className = 'status-badge status-offline';
+    }
+}
+
+// 录制功能
+async function toggleRecord() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        stopRecord();
+        return;
+    }
+    startRecord();
+}
+
+async function startRecord() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+            ? 'audio/webm;codecs=opus' : 'audio/webm';
+        mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
+        audioChunks = [];
+        
+        mediaRecorder.ondataavailable = e => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+        };
+        
+        mediaRecorder.onstop = async () => {
+            stream.getTracks().forEach(t => t.stop());
+            const webmBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            
+            const previewUrl = URL.createObjectURL(webmBlob);
+            const preview = document.getElementById('recPreview');
+            preview.src = previewUrl;
+            preview.style.display = 'block';
+            
+            try {
+                recordedBlob = await webmToWav(webmBlob);
+                document.getElementById('btnSaveRec').style.display = 'inline-flex';
+            } catch(e) {
+                console.error('WAV 转换失败:', e);
+                toast('音频转换失败，请重试', 'error');
+            }
+        };
+        
+        mediaRecorder.start();
+        recStartTime = Date.now();
+        document.getElementById('recBtn').innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+            停止录制
+        `;
+        document.getElementById('btnSaveRec').style.display = 'none';
+        document.getElementById('recPreview').style.display = 'none';
+        
+        recTimerInterval = setInterval(updateRecTimer, 200);
+    } catch(e) {
+        toast('无法访问麦克风: ' + e.message, 'error');
+    }
+}
+
+async function webmToWav(webmBlob) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const arrayBuffer = await webmBlob.arrayBuffer();
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    
+    const sampleRate = audioBuffer.sampleRate;
+    const length = audioBuffer.length;
+    const pcmData = audioBuffer.getChannelData(0);
+    
+    const buffer = new ArrayBuffer(44 + length * 2);
+    const view = new DataView(buffer);
+    
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + length * 2, true);
+    writeString(view, 8, 'WAVE');
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(view, 36, 'data');
+    view.setUint32(40, length * 2, true);
+    
+    let offset = 44;
+    for (let i = 0; i < length; i++) {
+        const sample = Math.max(-1, Math.min(1, pcmData[i]));
+        const intSample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+        view.setInt16(offset, intSample, true);
+        offset += 2;
+    }
+    
+    audioCtx.close();
+    return new Blob([buffer], { type: 'audio/wav' });
+}
+
+function writeString(view, offset, str) {
+    for (let i = 0; i < str.length; i++) {
+        view.setUint8(offset + i, str.charCodeAt(i));
+    }
+}
+
+function stopRecord() {
+    if (mediaRecorder) {
+        mediaRecorder.stop();
+        document.getElementById('recBtn').innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+            开始录制
+        `;
+        document.getElementById('recHint').textContent = '录制完成，可以预览或保存';
+        clearInterval(recTimerInterval);
+    }
+}
+
+function updateRecTimer() {
+    const elapsed = Math.floor((Date.now() - recStartTime) / 1000);
+    const min = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const sec = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('recTimer').textContent = `${min}:${sec}`;
+}
+
+async function saveRecording() {
+    if (!recordedBlob) {
+        toast('没有可保存的录音', 'error');
+        return;
+    }
+    const formData = new FormData();
+    formData.append('file', recordedBlob, `recording_${Date.now()}.wav`);
+    
+    try {
+        const res = await fetch('/api/upload_reference', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
+            toast('已保存到声音库', 'success');
+            document.getElementById('btnSaveRec').style.display = 'none';
+            document.getElementById('recPreview').style.display = 'none';
+            recordedBlob = null;
+        } else {
+            toast('保存失败: ' + (data.error || '未知错误'), 'error');
+        }
+    } catch(e) {
+        toast('保存失败', 'error');
+    }
+}
+
+// 上传音频
+function uploadAudio(event) {
+    handleAudioUpload(event.target.files);
+    event.target.value = '';
+}
+
+function handleAudioUpload(files) {
+    const statusEl = document.getElementById('uploadStatus');
+    Array.from(files).forEach(file => {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        statusEl.innerHTML = `<p style="color: #667eea;">上传中: ${file.name}...</p>`;
+        
+        fetch('/api/upload_reference', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    statusEl.innerHTML = `<p style="color: #48bb78;">✓ 上传成功: ${data.filename}</p>`;
+                    toast('音频已上传', 'success');
+                } else {
+                    statusEl.innerHTML = `<p style="color: #e53e3e;">✗ 上传失败: ${data.error}</p>`;
+                    toast('上传失败: ' + data.error, 'error');
+                }
+            })
+            .catch(e => {
+                statusEl.innerHTML = `<p style="color: #e53e3e;">✗ 上传失败</p>`;
+                toast('上传失败', 'error');
+            });
+    });
+}
+
+// 上传歌曲
+function uploadSong(event) {
+    handleSongUpload(event.target.files);
+    event.target.value = '';
+}
+
+function handleSongUpload(files) {
+    if (files.length === 0) return;
+    const file = files[0];
+    const statusEl = document.getElementById('songUploadStatus');
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    statusEl.innerHTML = `<p style="color: #667eea;">上传中: ${file.name}...</p>`;
+    
+    fetch('/api/upload_reference', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                statusEl.innerHTML = `<p style="color: #48bb78;">✓ 已选择: ${data.filename}</p>`;
+                uploadedSongPath = data.filename;
+                toast('歌曲已上传', 'success');
+            } else {
+                statusEl.innerHTML = `<p style="color: #e53e3e;">✗ 上传失败: ${data.error}</p>`;
+                toast('上传失败: ' + data.error, 'error');
+            }
+        })
+        .catch(e => {
+            statusEl.innerHTML = `<p style="color: #e53e3e;">✗ 上传失败</p>`;
+            toast('上传失败', 'error');
+        });
+}
+
+// 加载音频列表
+async function loadAudioList() {
+    try {
+        const res = await fetch('/api/reference_audios');
+        const data = await res.json();
+        const select = document.getElementById('trainAudio');
+        select.innerHTML = '<option value="">-- 请选择音频 --</option>';
+        data.files.forEach(f => {
+            select.innerHTML += `<option value="${f.path}">${f.name} (${f.size_kb}KB)</option>`;
+        });
+    } catch (e) {
+        console.error('加载音频列表失败', e);
+    }
+}
+
+// 加载模型列表
+async function loadModels() {
+    try {
+        const res = await fetch('/api/rvc/models');
+        const data = await res.json();
+        const list = document.getElementById('modelList');
+        
+        if (data.models && data.models.length > 0) {
+            list.innerHTML = data.models.map(m => `
+                <div class="model-item" onclick="selectModel('${m.name}')" id="model-${m.name.replace(/\./g, '-')}">
+                    <div>
+                        <div class="model-name">${m.name}</div>
+                        <div class="model-size">${m.size ? (m.size / 1024 / 1024).toFixed(2) + ' MB' : ''}</div>
+                    </div>
+                    <div class="model-actions">
+                        <button class="btn btn-danger btn-sm" onclick="deleteModel('${m.name}', event)">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            list.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">暂无模型，请先训练</div>';
+        }
+    } catch (e) {
+        document.getElementById('modelList').innerHTML = '<div style="text-align: center; padding: 20px; color: #e53e3e;">加载失败</div>';
+    }
+}
+
+// 选择模型
+function selectModel(name) {
+    selectedModelName = name;
+    document.getElementById('selectedModel').value = name;
+    document.getElementById('btnSelectModel').disabled = false;
+    
+    // 高亮选中的模型
+    document.querySelectorAll('.model-item').forEach(el => el.classList.remove('selected'));
+    const el = document.getElementById(`model-${name.replace(/\./g, '-')}`);
+    if (el) el.classList.add('selected');
+}
+
+// 删除模型
+async function deleteModel(name, event) {
+    event.stopPropagation();
+    if (!confirm(`确定要删除模型 ${name} 吗？`)) return;
+    
+    try {
+        const res = await fetch(`/api/rvc/models/${name}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.status === 'deleted') {
+            toast('模型已删除', 'success');
+            loadModels();
+        } else {
+            toast('删除失败: ' + (data.error || '未知错误'), 'error');
+        }
+    } catch (e) {
+        toast('删除失败', 'error');
+    }
+}
+
+// 开始训练
+async function startTraining() {
+    const audioPath = document.getElementById('trainAudio').value;
+    const modelName = document.getElementById('modelName').value.trim();
+    const epochs = document.getElementById('epochs').value;
+    const batchSize = document.getElementById('batchSize').value;
+    
+    if (!audioPath) {
+        toast('请选择训练音频', 'error');
+        return;
+    }
+    if (!modelName) {
+        toast('请输入模型名称', 'error');
+        return;
+    }
+    
+    const btnTrain = document.getElementById('btnTrain');
+    btnTrain.disabled = true;
+    btnTrain.innerHTML = '训练中...';
+    
+    document.getElementById('trainingProgress').style.display = 'block';
+    document.getElementById('trainPercent').textContent = '0%';
+    document.getElementById('trainFill').style.width = '0%';
+    document.getElementById('trainStatus').textContent = '正在启动训练...';
+    
+    try {
+        const formData = new FormData();
+        formData.append('audio_path', audioPath);
+        formData.append('model_name', modelName);
+        formData.append('epochs', epochs);
+        formData.append('batch_size', batchSize);
+        
+        const res = await fetch('/api/rvc/train', { method: 'POST', body: formData });
+        const data = await res.json();
+        
+        if (data.status === 'training_started') {
+            toast('训练已启动', 'success');
+            pollTrainingStatus();
+        } else {
+            toast('训练启动失败: ' + (data.error || '未知错误'), 'error');
+            btnTrain.disabled = false;
+            btnTrain.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                开始训练
+            `;
+        }
+    } catch (e) {
+        toast('训练启动失败', 'error');
+        btnTrain.disabled = false;
+        btnTrain.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            开始训练
+        `;
+    }
+}
+
+// 轮询训练状态
+async function pollTrainingStatus() {
+    const interval = setInterval(async () => {
+        try {
+            const res = await fetch('/api/rvc/training_status');
+            const data = await res.json();
+            
+            if (data.status === 'training') {
+                const progress = data.progress || 0;
+                document.getElementById('trainPercent').textContent = progress + '%';
+                document.getElementById('trainFill').style.width = progress + '%';
+                document.getElementById('trainStatus').textContent = 
+                    `Epoch: ${data.epoch || 0}/${data.total_epochs || '?'}`;
+            } else if (data.status === 'completed') {
+                clearInterval(interval);
+                document.getElementById('trainPercent').textContent = '100%';
+                document.getElementById('trainFill').style.width = '100%';
+                document.getElementById('trainStatus').textContent = '训练完成！';
+                toast('训练完成！', 'success');
+                
+                const btnTrain = document.getElementById('btnTrain');
+                btnTrain.disabled = false;
+                btnTrain.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    开始训练
+                `;
+            } else if (data.status === 'error') {
+                clearInterval(interval);
+                document.getElementById('trainStatus').textContent = '训练失败: ' + (data.error || '未知错误');
+                toast('训练失败', 'error');
+                
+                const btnTrain = document.getElementById('btnTrain');
+                btnTrain.disabled = false;
+                btnTrain.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    开始训练
+                `;
+            }
+        } catch (e) {
+            console.error('获取训练状态失败', e);
+        }
+    }, 2000);
+}
+
+// 生成翻唱
+async function generateCover() {
+    if (!selectedModelName) {
+        toast('请先选择模型', 'error');
+        return;
+    }
+    if (!uploadedSongPath) {
+        toast('请先上传歌曲', 'error');
+        return;
+    }
+    
+    const btnGenerate = document.getElementById('btnGenerate');
+    btnGenerate.disabled = true;
+    btnGenerate.innerHTML = '生成中...';
+    
+    document.getElementById('coverProgress').style.display = 'block';
+    document.getElementById('coverPercent').textContent = '0%';
+    document.getElementById('coverFill').style.width = '0%';
+    document.getElementById('coverMsg').textContent = '正在处理...';
+    
+    try {
+        const formData = new FormData();
+        formData.append('model_name', selectedModelName);
+        formData.append('pitch', document.getElementById('pitch').value);
+        formData.append('f0_method', document.getElementById('f0Method').value);
+        
+        // 获取歌曲文件
+        const songInput = document.getElementById('songInput');
+        if (songInput.files.length > 0) {
+            formData.append('file', songInput.files[0]);
+        } else {
+            toast('请先上传歌曲文件', 'error');
+            btnGenerate.disabled = false;
+            btnGenerate.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                生成翻唱
+            `;
+            return;
+        }
+        
+        // 模拟进度
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 5;
+            if (progress <= 90) {
+                document.getElementById('coverPercent').textContent = progress + '%';
+                document.getElementById('coverFill').style.width = progress + '%';
+            }
+        }, 500);
+        
+        const res = await fetch('/api/rvc/voice_change', { method: 'POST', body: formData });
+        const data = await res.json();
+        
+        clearInterval(progressInterval);
+        
+        if (data.status === 'success') {
+            document.getElementById('coverPercent').textContent = '100%';
+            document.getElementById('coverFill').style.width = '100%';
+            document.getElementById('coverMsg').textContent = '生成完成！';
+            
+            document.getElementById('coverResult').innerHTML = `
+                <div class="result-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: #48bb78; font-weight: 600;">✓ 翻唱生成完成</span>
+                        <a href="/output/${data.audio_path.split('/').pop()}" download class="btn btn-outline btn-sm">下载</a>
+                    </div>
+                    <audio controls src="/output/${data.audio_path.split('/').pop()}" style="width: 100%;"></audio>
+                </div>
+            `;
+            
+            toast('翻唱生成完成！', 'success');
+        } else {
+            document.getElementById('coverMsg').textContent = '生成失败';
+            toast('生成失败: ' + (data.error || '未知错误'), 'error');
+        }
+        
+        btnGenerate.disabled = false;
+        btnGenerate.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            生成翻唱
+        `;
+    } catch (e) {
+        toast('生成失败', 'error');
+        btnGenerate.disabled = false;
+        btnGenerate.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            生成翻唱
+        `;
+    }
+}
+
+// Toast提示
+function toast(msg, type = 'info') {
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+}
+
+// 拖拽上传
+document.addEventListener('DOMContentLoaded', function() {
+    const dropZone = document.getElementById('dropZone');
+    if (dropZone) {
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            handleAudioUpload(e.dataTransfer.files);
+        });
+    }
+    
+    const songDropZone = document.getElementById('songDropZone');
+    if (songDropZone) {
+        songDropZone.addEventListener('dragover', e => { e.preventDefault(); songDropZone.classList.add('drag-over'); });
+        songDropZone.addEventListener('dragleave', () => songDropZone.classList.remove('drag-over'));
+        songDropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            songDropZone.classList.remove('drag-over');
+            handleSongUpload(e.dataTransfer.files);
+        });
+    }
+});
+</script>
+</body>
+</html>
